@@ -12,5 +12,9 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    dispatch(function () {
+        logger('I have to tell you the future.');
+    })->delay(now()->addMinutes(2));
+
+    return 'Finished';
 });
