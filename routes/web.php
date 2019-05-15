@@ -15,7 +15,7 @@ use App\Jobs\ReconcileAccount;
 Route::get('/', function () {
     $user = App\User::first();
 
-    ReconcileAccount::dispatch($user);
+    ReconcileAccount::dispatch($user)->onQueue('high');
 
     return 'Finished';
 });
