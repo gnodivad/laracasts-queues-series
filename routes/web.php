@@ -1,5 +1,6 @@
 <?php
 use App\Jobs\ReconcileAccount;
+use Illuminate\Pipeline\Pipeline;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,9 +14,32 @@ use App\Jobs\ReconcileAccount;
 */
 
 Route::get('/', function () {
-    $user = App\User::first();
+    // $user = App\User::first();
 
-    ReconcileAccount::dispatch($user)->onQueue('high');
+    // ReconcileAccount::dispatch($user)->onQueue('high');
 
-    return 'Finished';
+    // return 'Finished';
+    $pipeline = app(Pipeline::class);
+
+    $pipeline->send('hello freaking world')
+        ->through([
+            function ($string, $next) {
+                $string = ucwords($string);
+
+                return $next($string);
+            },
+
+            function ($string, $next) {
+                $string = str_ireplace('freaking', '', $string);
+
+                return $next($string);
+            },
+
+            ReconcileAccount::class,
+        ])
+        ->then(function ($string) {
+            dump($string);
+        });
+
+    return 'Done';
 });

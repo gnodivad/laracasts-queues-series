@@ -31,8 +31,10 @@ class ReconcileAccount implements ShouldQueue
      *
      * @return void
      */
-    public function handle(Filesystem $file)
+    public function handle($string, $next)
     {
-        logger('Reconciling the user ' . $this->user->name);
+        // logger('Reconciling the user ' . $this->user->name);
+
+        return $next('something else');
     }
 }
